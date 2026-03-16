@@ -5,12 +5,10 @@ import org.junit.jupiter.api.AfterAll;
 
 public abstract class BaseTest {
 
-    // Константы для использования в API запросах
-    public static final String BASE_URL = "http://localhost:8001/";
-    public static final String REGISTER_ENDPOINT = "register/";
+    public static final String APP_UI_URL = "http://localhost:8001/";
 
     @AfterAll
-    static void rearDown() {
+    static void tearDown() {
         DbUtils.closeConnection();
     }
 }

@@ -1,20 +1,17 @@
-package org.example.models;
+package org.example.backend.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserResponse {
 
-    private UUID id;
+    private String id;
     private String name;
     private String email;
-    private String hashed_password;
-    private boolean is_superadmin;
 }

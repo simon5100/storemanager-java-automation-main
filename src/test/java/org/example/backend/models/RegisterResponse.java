@@ -1,4 +1,4 @@
-package org.example.models;
+package org.example.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -15,5 +15,5 @@ public class RegisterResponse {
     @JsonProperty("message")
     String message;
 
-    RegisterRequest user;
+    UserResponse user;
 }
