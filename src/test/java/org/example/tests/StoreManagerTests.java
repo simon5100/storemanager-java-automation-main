@@ -1,20 +1,42 @@
 package org.example.tests;
 
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.example.db.UsersQueries;
+import org.example.models.RegisterRequest;
+import org.example.models.RegisterResponse;
+import org.example.models.User;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StoreManagerTests {
+public class StoreManagerTests extends BaseTest {
 
     @Test
     void firstApiTest() {
-        /*
-        В рамках этого теста нам потребуется реализовать первый API запрос и проверить результаты.
+        RegisterRequest request = RegisterRequest.generate();
+        RegisterResponse registerResponse = getRegisterResponse(request);
 
-        1. Сначала можно написать первичную версию и убедиться, что запрос в целом работает
-        2. Далее можно немного улучшать
-        3. Добавляем сериализацию и десериализацию
-        4. Используем константы с URL приложения и эндпоинтом
-        5. Выносим отправку запроса в отдельный метод для более удобного использования
-         */
+        assertEquals("User successfully created", registerResponse.getMessage());
+        assertEquals(registerResponse.getUser().getEmail(), request.getEmail());
+        assertEquals(request.getName(), registerResponse.getUser().getName());
+
+        User userFromDb = UsersQueries.getUserByName(request.getName());
+
+        assertEquals(registerResponse.getUser().getName(), userFromDb.getName());
     }
 
+    private static RegisterResponse getRegisterResponse(RegisterRequest request) {
+        return RestAssured
+                .given().log().all()
+                .baseUri(BASE_URL)
+                .basePath(REGISTER_ENDPOINT)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().log().all()
+                .post()
+                .then()
+                .log().all()
+                .extract()
+                .as(RegisterResponse.class);
+    }
 }

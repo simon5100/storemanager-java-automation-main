@@ -12,62 +12,68 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+
+        <lombok.version>1.18.38</lombok.version>
+
+        <junit.version>6.1.0-M1</junit.version>
+
+        <dbutils.version>1.8.1</dbutils.version>
+        <postgresql.version>42.7.10</postgresql.version>
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.11.4</version>
-            <!-- JUnit Jupiter Engine - основной движок для выполнения тестов JUnit 5.
-                 Необходим для запуска тестов, написанных с использованием JUnit 5. -->
+            <version>${junit.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.11.4</version>
-            <!-- JUnit Jupiter API - предоставляет аннотации и классы для написания тестов JUnit 5.
-                 Необходим для создания и аннотирования тестовых методов. -->
+            <version>${junit.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.27.0</version>
-            <!-- Selenium Java - библиотека для автоматизации веб-браузеров.
-                 Используется для написания тестов, которые взаимодействуют с веб-приложениями через браузер. -->
+            <version>4.41.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>5.5.0</version>
-            <!-- REST Assured - библиотека для тестирования RESTful веб-сервисов.
-                 Предоставляет удобный DSL для написания тестов, которые проверяют HTTP запросы и ответы. -->
+            <version>6.0.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.18.2</version>
-            <!-- Jackson Databind - библиотека для сериализации и десериализации JSON.
-                 Используется для преобразования Java объектов в JSON и обратно. -->
+            <version>3.1.0</version>
+            <scope>compile</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.36</version>
-            <scope>provided</scope>
-            <!-- Lombok - библиотека для сокращения шаблонного кода в Java.
-                 Предоставляет аннотации для автоматической генерации геттеров, сеттеров, конструкторов и других методов. -->
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>${dbutils.version}</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
@@ -77,17 +83,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.5</version>
                 <configuration>
                     <testFailureIgnore>true</testFailureIgnore>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>15</source>
-                    <target>15</target>
                 </configuration>
             </plugin>
         </plugins>
