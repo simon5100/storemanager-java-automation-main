@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
-import static org.example.backend.AuthServiceRequest.getRegisterResponse;
+import static org.example.backend.requests.AuthServiceRequest.getRegisterResponse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StoreManagerUiTests extends BaseTest {
@@ -38,7 +38,23 @@ public class StoreManagerUiTests extends BaseTest {
     void loginTest() {
         new LoginPage(driver).loginAs(testUser);
 
-        assertTrue(new ProductsPage(driver).isPrivateAccountDisplayed());
+        ProductsPage productsPage = new ProductsPage(driver);
+        assertTrue(productsPage.isPrivateAccountDisplayed());
+
+        productsPage.clickSuppliersLink();
+
+    }
+
+    @Test
+    void createSupplierTest() {
+
+
+
+        new LoginPage(driver).loginAs(testUser);
+        new ProductsPage(driver).clickSuppliersLink();
+
+
+
     }
 
     @AfterEach

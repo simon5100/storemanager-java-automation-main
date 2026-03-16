@@ -6,7 +6,7 @@ import org.example.db.UsersQueries;
 import org.example.db.models.User;
 import org.example.tests.BaseTest;
 import org.junit.jupiter.api.Test;
-import static org.example.backend.AuthServiceRequest.*;
+import static org.example.backend.requests.AuthServiceRequest.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StoreManagerApiTests extends BaseTest {
@@ -24,13 +24,6 @@ public class StoreManagerApiTests extends BaseTest {
 
         assertEquals(request.getName(), userFromDb.getName());
         assertEquals(request.getEmail(), userFromDb.getEmail());
-
-        UsersQueries.setUserSuperAdminByName(request.getName());
-
-        getUserToken(registerResponse.getUser().getId());
-
-        postLogin(LoginRequest.builder()
-                .email(request.getEmail()).password(request.getPassword()).build());
     }
 
     @Test
