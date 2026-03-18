@@ -47,6 +47,8 @@ public class StoreManagerApiTests extends BaseTest {
         LoginResponse loginResponse = postLogin(LoginRequest.builder()
                 .email(request.getEmail()).password(request.getPassword()).build());
         Response pendingProducts = gePendingProducts(loginResponse.getAccessToken());
+
+
         assertEquals(403, pendingProducts.statusCode());
         assertEquals("Insufficient rights to view pending products", pendingProducts.jsonPath().get("detail"));
     }
