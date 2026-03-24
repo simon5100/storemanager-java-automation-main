@@ -2,7 +2,7 @@ package org.example.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.example.tests.DataUtils;
+import org.example.utils.DataUtils;
 
 @Data
 @Builder

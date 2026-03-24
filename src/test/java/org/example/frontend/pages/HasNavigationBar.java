@@ -5,21 +5,21 @@ import org.openqa.selenium.WebDriver;
 
 public interface HasNavigationBar {
 
-    WebDriver getDriver();
+    WebDriver driver();
 
     default boolean isPrivateAccountDisplayed() {
-        return getDriver().findElement(By.xpath("//nav//a[contains(., 'Личный кабинет')]")).isDisplayed();
+        return driver().findElement(By.xpath("//nav//a[contains(., 'Личный кабинет')]")).isDisplayed();
     }
 
     default void clickProductsLink() {
-        getDriver().findElement(By.xpath("//nav//a[contains(., 'Продукты')]")).click();
+        driver().findElement(By.xpath("//nav//a[contains(., 'Продукты')]")).click();
     }
 
     default void clickSuppliersLink() {
-        getDriver().findElement(By.xpath("//nav//a[contains(., 'Поставщики')]")).click();
+        driver().findElement(By.xpath("//nav//a[contains(., 'Поставщики')]")).click();
     }
 
     default void clickWarehousesLink() {
-        getDriver().findElement(By.xpath("//nav//a[contains(., 'Склады')]")).click();
+        driver().findElement(By.xpath("//nav//a[contains(., 'Склады')]")).click();
     }
 }

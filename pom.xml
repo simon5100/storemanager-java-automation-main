@@ -21,6 +21,10 @@
 
         <dbutils.version>1.8.1</dbutils.version>
         <postgresql.version>42.7.10</postgresql.version>
+
+        <selenium.version>4.41.0</selenium.version>
+        <rest-assured.version>6.0.0</rest-assured.version>
+        <jackson-databind.version>3.1.0</jackson-databind.version>
     </properties>
 
     <dependencies>
@@ -40,19 +44,19 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.41.0</version>
+            <version>${selenium.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>6.0.0</version>
+            <version>${rest-assured.version}</version>
         </dependency>
 
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.1.0</version>
+            <version>${jackson-databind.version}</version>
             <scope>compile</scope>
         </dependency>
 

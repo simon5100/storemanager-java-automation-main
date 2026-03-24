@@ -4,7 +4,9 @@ import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.example.db.models.User;
+
 import java.util.List;
+
 import static org.example.db.DbUtils.getConnection;
 
 public class UsersQueries {
@@ -20,8 +22,8 @@ public class UsersQueries {
     public static void setUserSuperAdminByName(String name) {
         String query =
                 "UPDATE users " +
-                "SET is_superadmin = TRUE " +
-                "WHERE name = ?";
+                        "SET is_superadmin = TRUE " +
+                        "WHERE name = ?";
 
         new QueryRunner().execute(getConnection(), query, name);
     }

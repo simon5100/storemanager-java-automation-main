@@ -1,11 +1,15 @@
 package org.example.tests.backend;
 
 import io.restassured.response.Response;
-import org.example.backend.models.*;
+import org.example.backend.models.LoginRequest;
+import org.example.backend.models.LoginResponse;
+import org.example.backend.models.RegisterRequest;
+import org.example.backend.models.RegisterResponse;
 import org.example.db.UsersQueries;
 import org.example.db.models.User;
 import org.example.tests.BaseTest;
 import org.junit.jupiter.api.Test;
+
 import static org.example.backend.requests.AuthServiceRequest.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,7 +18,7 @@ public class StoreManagerApiTests extends BaseTest {
     @Test
     void createUserTest() {
         RegisterRequest request = RegisterRequest.generate();
-        RegisterResponse registerResponse = getRegisterResponse(request);
+        RegisterResponse registerResponse = executeGetRegister(request);
 
         assertEquals("User successfully created", registerResponse.getMessage());
         assertEquals(registerResponse.getUser().getEmail(), request.getEmail());
@@ -29,24 +33,24 @@ public class StoreManagerApiTests extends BaseTest {
     @Test
     void pendingProductsBySuperAdminTest() {
         RegisterRequest request = RegisterRequest.generate();
-        getRegisterResponse(request);
+        executeGetRegister(request);
 
         UsersQueries.setUserSuperAdminByName(request.getName());
 
-        LoginResponse loginResponse = postLogin(LoginRequest.builder()
+        LoginResponse loginResponse = executePostLogin(LoginRequest.builder()
                 .email(request.getEmail()).password(request.getPassword()).build());
-        Response pendingProducts = gePendingProducts(loginResponse.getAccessToken());
+        Response pendingProducts = executeGePendingProducts(loginResponse.getAccessToken());
         assertEquals(200, pendingProducts.statusCode());
     }
 
     @Test
     void pendingProductsByRegularUserTest() {
         RegisterRequest request = RegisterRequest.generate();
-        getRegisterResponse(request);
+        executeGetRegister(request);
 
-        LoginResponse loginResponse = postLogin(LoginRequest.builder()
+        LoginResponse loginResponse = executePostLogin(LoginRequest.builder()
                 .email(request.getEmail()).password(request.getPassword()).build());
-        Response pendingProducts = gePendingProducts(loginResponse.getAccessToken());
+        Response pendingProducts = executeGePendingProducts(loginResponse.getAccessToken());
 
 
         assertEquals(403, pendingProducts.statusCode());

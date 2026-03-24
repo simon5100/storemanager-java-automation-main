@@ -1,7 +1,6 @@
 package org.example.tests.frontend;
 
 import org.example.backend.models.LoginRequest;
-import org.example.backend.models.RegisterRequest;
 import org.example.backend.models.SupplierCreateModel;
 import org.example.backend.requests.ProductServiceRequest;
 import org.example.frontend.models.User;
@@ -16,8 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
-import static org.example.backend.requests.AuthServiceRequest.getRegisterResponse;
-import static org.example.backend.requests.AuthServiceRequest.postLogin;
+import static org.example.backend.requests.AuthServiceRequest.executePostLogin;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StoreManagerUiTests extends BaseTest {
@@ -34,12 +32,6 @@ public class StoreManagerUiTests extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
-    private User registerTestUser() {
-        RegisterRequest request = RegisterRequest.generate();
-        getRegisterResponse(request);
-        return User.builder().email(request.getEmail()).password(request.getPassword()).build();
-    }
-
     @Test
     void loginTest() {
         new LoginPage(driver).loginAs(testUser);
@@ -53,7 +45,7 @@ public class StoreManagerUiTests extends BaseTest {
 
     @Test
     void createSupplierTest() {
-        String accessToken = postLogin(LoginRequest.builder()
+        String accessToken = executePostLogin(LoginRequest.builder()
                 .email(testUser.getEmail()).password(testUser.getPassword()).build()).getAccessToken();
 
         SupplierCreateModel createSupplier =
