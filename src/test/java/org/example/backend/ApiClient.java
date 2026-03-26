@@ -1,5 +1,6 @@
 package org.example.backend;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -69,7 +70,8 @@ public class ApiClient {
     }
 
     public Response innerSendRequest(Method method, String path, Object body) {
-        RequestSpecification specification = RestAssured.given().spec(requestSpec);
+        RequestSpecification specification = RestAssured.given()
+                .filter(new AllureRestAssured()).spec(requestSpec);
 
         if (body != null) {
             specification.body(body);

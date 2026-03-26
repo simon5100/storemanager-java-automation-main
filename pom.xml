@@ -17,7 +17,7 @@
 
         <lombok.version>1.18.38</lombok.version>
 
-        <junit.version>6.1.0-M1</junit.version>
+        <junit.version>5.10.2</junit.version>
 
         <dbutils.version>1.8.1</dbutils.version>
         <postgresql.version>42.7.10</postgresql.version>
@@ -25,6 +25,13 @@
         <selenium.version>4.41.0</selenium.version>
         <rest-assured.version>6.0.0</rest-assured.version>
         <jackson-databind.version>3.1.0</jackson-databind.version>
+        <owner.version>1.0.12</owner.version>
+
+        <allure-junit5.version>2.33.0</allure-junit5.version>
+        <aspectj.version>1.9.25.1</aspectj.version>
+        <jakarta.inject-api.version>2.0.1</jakarta.inject-api.version>
+        <allure-maven.version>2.17.0</allure-maven.version>
+        <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
     </properties>
 
     <dependencies>
@@ -34,10 +41,14 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.version}</version>
         </dependency>
 
@@ -57,7 +68,6 @@
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -80,6 +90,42 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner</artifactId>
+            <version>${owner.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure-junit5.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${allure-junit5.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>${jakarta.inject-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.17</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.32</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -87,12 +133,59 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <testFailureIgnore>true</testFailureIgnore>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <systemPropertyVariables>
+                        <allure.results.directory>target/allure-results</allure.results.directory>
+                    </systemPropertyVariables>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>${allure-maven.version}</version>
+                <configuration>
+                    <reportVersion>${allure-junit5.version}</reportVersion>
+                    <resultsDirectory>${project.basedir}/target/allure-results</resultsDirectory>
+                    <allureDownloadUrl>https://repo.maven.apache.org/maneb2/io/gameta/allure/allure-commandline/${allure-junit5.version}.zip</allureDownloadUrl>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>${allure-maven.version}</version>
+                <configuration>
+                    <reportVersion>${allure-junit5.version}</reportVersion>
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </reporting>
 
 </project>

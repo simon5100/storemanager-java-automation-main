@@ -1,5 +1,6 @@
 package org.example.frontend.pages.elements;
 
+import io.qameta.allure.Step;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.example.backend.models.SupplierCreateModel;
@@ -12,10 +13,12 @@ public class SuppliersTableRow {
 
     WebElement root;
 
+    @Step("Get SupplierTableRow name")
     public String getName() {
         return root.findElement(By.xpath(".//td[1]")).getText();
     }
 
+    @Step("Get SupplierTableRow model")
     public SupplierCreateModel getSupplierCreateModel() {
         return SupplierCreateModel.builder()
                 .name(root.findElement(By.xpath(".//td[1]")).getText())
@@ -29,10 +32,12 @@ public class SuppliersTableRow {
                 .build();
     }
 
+    @Step("Click edit button for SuppliersTableRow")
     public void clickEditButton() {
         root.findElement(By.cssSelector("button.btn-outline-warning")).click();
     }
 
+    @Step("Click delete button for SuppliersTableRow")
     public void clickDeleteButton() {
         root.findElement(By.cssSelector("button.btn-outline-danger")).click();
     }

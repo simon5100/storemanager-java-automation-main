@@ -8,6 +8,7 @@ public interface HasNavigationBar {
     WebDriver driver();
 
     default boolean isPrivateAccountDisplayed() {
+
         return driver().findElement(By.xpath("//nav//a[contains(., 'Личный кабинет')]")).isDisplayed();
     }
 

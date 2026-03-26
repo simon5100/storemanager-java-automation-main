@@ -1,6 +1,8 @@
 package org.example.tests.backend;
 
+import io.qameta.allure.Feature;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.example.backend.models.LoginRequest;
 import org.example.backend.models.LoginResponse;
 import org.example.backend.models.RegisterRequest;
@@ -8,11 +10,16 @@ import org.example.backend.models.RegisterResponse;
 import org.example.db.UsersQueries;
 import org.example.db.models.User;
 import org.example.tests.BaseTest;
+import org.example.tests.extensions.AllureScreenshotExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.example.backend.requests.AuthServiceRequest.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
+@Feature("API tests")
+@ExtendWith(AllureScreenshotExtension.class)
 public class StoreManagerApiTests extends BaseTest {
 
     @Test

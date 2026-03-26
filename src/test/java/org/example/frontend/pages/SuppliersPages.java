@@ -1,5 +1,6 @@
 package org.example.frontend.pages;
 
+import io.qameta.allure.Step;
 import lombok.Getter;
 import org.example.frontend.pages.elements.SuppliersTableRow;
 import org.openqa.selenium.WebDriver;
@@ -26,6 +27,7 @@ public class SuppliersPages implements HasNavigationBar {
         PageFactory.initElements(this.driver, this);
     }
 
+    @Step("Get SuppliersTableRow by name on Suppliers Pge")
     public SuppliersTableRow getTableRowByName(String name) {
         return suppliersTableRows.stream()
                 .map(SuppliersTableRow::new)
@@ -34,16 +36,23 @@ public class SuppliersPages implements HasNavigationBar {
                 .orElseThrow();
     }
 
-    public boolean isDeletedSupplierNotificationDisplayed() {
-        return deletedSupplierNotification.isDisplayed();
-    }
-
-    public boolean isDeletedSupplierExistsOnThePage(String name) {
+    @Step("Verify supplier exists on Suppliers Pge")
+    public boolean isSupplierExistsOnThePage(String name) {
 
         return suppliersTableRows.stream()
                 .map(SuppliersTableRow::new)
                 .map(SuppliersTableRow::getName)
                 .toList().contains(name);
 
+    }
+
+    @Step("Verify deleted suppliers notification is displayed on Suppliers Pge")
+    public boolean isDeletedSupplierNotificationDisplayed() {
+        return deletedSupplierNotification.isDisplayed();
+    }
+
+    @Override
+    public WebDriver driver() {
+        return null;
     }
 }

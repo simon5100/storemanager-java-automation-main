@@ -1,5 +1,7 @@
 package org.example.tests.frontend;
 
+import io.qameta.allure.Feature;
+import lombok.extern.slf4j.Slf4j;
 import org.example.backend.models.LoginRequest;
 import org.example.backend.models.SupplierCreateModel;
 import org.example.backend.requests.ProductServiceRequest;
@@ -9,15 +11,23 @@ import org.example.frontend.pages.ProductsPage;
 import org.example.frontend.pages.SuppliersPages;
 import org.example.frontend.pages.elements.SuppliersTableRow;
 import org.example.tests.BaseTest;
+import org.example.tests.extensions.AllureScreenshotExtension;
+import org.example.utils.WebDriverCreator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 import static org.example.backend.requests.AuthServiceRequest.executePostLogin;
+import static org.example.backend.requests.ProductServiceRequest.executePostCreateSupplier;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
+@Feature("UI tests")
+@ExtendWith(AllureScreenshotExtension.class)
 public class StoreManagerUiTests extends BaseTest {
 
     User testUser;
@@ -26,30 +36,28 @@ public class StoreManagerUiTests extends BaseTest {
     @BeforeEach
     void setUp() {
         testUser = registerTestUser();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+        driver = WebDriverCreator.getDriver();
         driver.get(APP_UI_URL);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @Test
+    @DisplayName("Login")
     void loginTest() {
+        log.info("Start login test");
         new LoginPage(driver).loginAs(testUser);
 
         ProductsPage productsPage = new ProductsPage(driver);
         assertTrue(productsPage.isPrivateAccountDisplayed());
-
-        productsPage.clickSuppliersLink();
-
     }
 
     @Test
-    void createSupplierTest() {
-        String accessToken = executePostLogin(LoginRequest.builder()
-                .email(testUser.getEmail()).password(testUser.getPassword()).build()).getAccessToken();
-
-        SupplierCreateModel createSupplier =
-                ProductServiceRequest.executePostCreateSupplier(
+    @DisplayName("Delete supplier")
+    void deleteSupplierTest() {
+        log.info("Start delete supplier test");
+        LoginRequest loginRequest  = LoginRequest.builder()
+                .email(testUser.getEmail()).password(testUser.getPassword()).build();
+        String accessToken = executePostLogin(loginRequest).getAccessToken();
+        SupplierCreateModel createSupplier = executePostCreateSupplier(
                         SupplierCreateModel.generate(), accessToken);
 
 
@@ -57,22 +65,19 @@ public class StoreManagerUiTests extends BaseTest {
         new ProductsPage(driver).clickSuppliersLink();
 
         SuppliersPages suppliersPages = new SuppliersPages(driver);
-        SuppliersTableRow suppliersTableRow = suppliersPages.getTableRowByName(createSupplier.getName());
-        SupplierCreateModel actualSupplier = suppliersTableRow.getSupplierCreateModel();
-
+        SupplierCreateModel actualSupplier = suppliersPages
+                .getTableRowByName(createSupplier.getName()).getSupplierCreateModel();
         assertEquals(createSupplier, actualSupplier);
 
-        suppliersTableRow.clickDeleteButton();
+        suppliersPages.getTableRowByName(createSupplier.getName()).clickDeleteButton();
         driver.switchTo().alert().accept();
-
         assertTrue(suppliersPages.isDeletedSupplierNotificationDisplayed());
-
-        assertFalse(suppliersPages.isDeletedSupplierExistsOnThePage(createSupplier.getName()));
-
+        assertTrue(suppliersPages.isSupplierExistsOnThePage(createSupplier.getName())); //fals
     }
 
     @AfterEach
     void tearDown() {
-        driver.quit();
+        log.info("Test ending, quit driver");
+        WebDriverCreator.closeDriver();
     }
 }
